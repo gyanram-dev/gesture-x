@@ -1,2 +1,2 @@
+export { useCamera } from './useCamera';
 export { useMediaPipeHands } from './useMediaPipeHands';
-export { useGestureRecognition } from './useGestureRecognition';

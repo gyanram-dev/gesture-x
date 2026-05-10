@@ -1,3 +1,5 @@
+import { Camera } from '../../components';
+
 export function HomePage() {
-  return <div>Home Page</div>;
+  return <Camera />;
 }
