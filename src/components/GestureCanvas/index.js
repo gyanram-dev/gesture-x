@@ -1,0 +1,1 @@
+export { GestureCanvas } from './GestureCanvas';
