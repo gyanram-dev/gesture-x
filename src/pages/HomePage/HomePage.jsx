@@ -3,7 +3,7 @@ import { useCamera } from '../../hooks/useCamera';
 import { useEmotionDetection } from '../../hooks/useEmotionDetection';
 import { Camera } from '../../components/Camera';
 import { EmotionOverlay } from '../../components/EmotionOverlay';
-import { EmotionCard } from '../../components/EmotionCard';
+import { AIDashboard } from '../../components/Dashboard/AIDashboard';
 
 const shellClass =
   'emotionx-shell flex min-h-dvh w-full flex-col items-center justify-center gap-4 px-6 py-10 text-center';
@@ -108,21 +108,10 @@ export function HomePage() {
         <EmotionOverlay videoRef={videoRef} facesRef={facesRef} stream={stream} />
       )}
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
         aria-hidden
       />
-      <header className="pointer-events-none absolute left-0 right-0 top-0 z-10 flex justify-center pt-6 sm:pt-8">
-        <div className="emotionx-hud rounded-full border border-white/10 bg-black/35 px-5 py-2 text-xs font-medium uppercase tracking-[0.2em] text-cyan-200/90 shadow-[0_0_24px_rgba(34,211,238,0.15)] backdrop-blur-md sm:text-sm">
-          EmotionX · Live
-          {isModelLoading ? ' · Syncing models' : ''}
-        </div>
-      </header>
-      {!modelError && <EmotionCard hud={hud} />}
-      {modelError ? (
-        <div className="pointer-events-none fixed bottom-6 right-6 z-30 max-w-sm rounded-xl border border-red-400/30 bg-red-950/80 px-4 py-3 text-sm text-red-100 shadow-lg backdrop-blur-md">
-          Model load failed: {modelError}
-        </div>
-      ) : null}
+      <AIDashboard hud={hud} isModelLoading={isModelLoading} modelError={modelError} />
     </div>
   );
 }

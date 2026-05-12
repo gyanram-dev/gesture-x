@@ -20,7 +20,7 @@ export function EmotionCard({ hud }) {
     : [];
 
   return (
-    <aside className="emotionx-card pointer-events-none fixed bottom-6 left-6 z-20 w-[min(92vw,320px)] rounded-2xl border border-cyan-400/20 bg-slate-950/70 p-4 shadow-[0_0_40px_rgba(34,211,238,0.12)] backdrop-blur-xl">
+    <aside className="emotionx-card pointer-events-none fixed bottom-6 left-6 z-[28] w-[min(92vw,320px)] rounded-2xl border border-cyan-400/20 bg-slate-950/70 p-4 shadow-[0_0_40px_rgba(34,211,238,0.12)] backdrop-blur-xl">
       <div className="mb-3 flex items-center justify-between gap-3">
         <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-cyan-200/80">
           Affective core

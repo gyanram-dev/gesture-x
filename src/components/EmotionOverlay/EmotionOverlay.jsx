@@ -142,7 +142,7 @@ export function EmotionOverlay({ videoRef, facesRef, stream }) {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none absolute inset-0 z-[5] h-full w-full"
+      className="pointer-events-none absolute inset-0 z-[22] h-full w-full"
       aria-hidden
     />
   );
