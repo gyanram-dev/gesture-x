@@ -1,8 +1,10 @@
 import { useRef } from 'react';
 import { useCamera } from '../../hooks/useCamera';
 import { useEmotionDetection } from '../../hooks/useEmotionDetection';
+import { useHandTracking } from '../../hooks/useHandTracking';
 import { Camera } from '../../components/Camera';
 import { EmotionOverlay } from '../../components/EmotionOverlay';
+import { HandOverlay } from '../../components/HandOverlay';
 import { AIDashboard } from '../../components/Dashboard/AIDashboard';
 
 const shellClass =
@@ -81,6 +83,7 @@ export function HomePage() {
   const { facesRef, hud, isModelLoading, modelError } = useEmotionDetection(videoRef, {
     enabled: cameraLive,
   });
+  const { resultsRef } = useHandTracking(videoRef, { enabled: cameraLive });
 
   if (isLoading) {
     return <LoadingView />;
@@ -107,6 +110,7 @@ export function HomePage() {
       {!modelError && (
         <EmotionOverlay videoRef={videoRef} facesRef={facesRef} stream={stream} />
       )}
+      <HandOverlay videoRef={videoRef} resultsRef={resultsRef} stream={stream} />
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
         aria-hidden
