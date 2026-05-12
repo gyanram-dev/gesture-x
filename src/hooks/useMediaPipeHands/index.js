@@ -1,1 +1,0 @@
-export { useMediaPipeHands } from './useMediaPipeHands';

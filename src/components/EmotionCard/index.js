@@ -1,0 +1,1 @@
+export { EmotionCard } from './EmotionCard';

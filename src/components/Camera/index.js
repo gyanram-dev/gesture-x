@@ -1,1 +1,1 @@
-export { Camera } from './Camera.jsx';
+export { Camera } from './Camera';

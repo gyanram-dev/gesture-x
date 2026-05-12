@@ -1,1 +1,1 @@
-export { useCamera } from './useCamera.js';
+export { useCamera } from './useCamera';

@@ -1,2 +1,1 @@
-export { useCamera } from './useCamera';
 export { useEmotionDetection } from './useEmotionDetection';

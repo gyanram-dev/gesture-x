@@ -1,1 +1,0 @@
-export { GESTURES } from './gestureTypes';

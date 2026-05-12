@@ -1,12 +1,59 @@
+@import 'tailwindcss';
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #0a0a0a;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   color: #fff;
-  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 800px at 20% 0%, rgba(34, 211, 238, 0.12), transparent 55%),
+    radial-gradient(900px 600px at 100% 30%, rgba(168, 85, 247, 0.1), transparent 50%),
+    #030712;
+}
+
+.emotionx-shell {
+  min-height: 100dvh;
+}
+
+.emotionx-loader {
+  animation: emotionx-spin 0.85s linear infinite;
+}
+
+@keyframes emotionx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.emotionx-brand {
+  text-shadow:
+    0 0 20px rgba(34, 211, 238, 0.35),
+    0 0 40px rgba(168, 85, 247, 0.2);
+}
+
+.emotionx-stage {
+  background: #000;
+}
+
+.emotionx-video {
+  transform: scaleX(-1);
+}
+
+.emotionx-confidence-fill {
+  transition: width 160ms ease-out;
+}
+
+.emotionx-mini-bar {
+  transition: width 180ms ease-out;
 }

@@ -1,19 +1,25 @@
-import { useCamera } from '../../hooks/useCamera';
+import { forwardRef, useEffect } from 'react';
 
-export function Camera() {
-  const { videoRef, isLoading, error } = useCamera();
+export const Camera = forwardRef(function Camera({ stream, videoClassName = '' }, ref) {
+  useEffect(() => {
+    const video = ref && typeof ref !== 'function' ? ref.current : null;
+    if (!video) return;
 
-  if (isLoading) return <div>Loading camera...</div>;
-  if (error === 'permission_denied') return <div>Camera permission denied</div>;
-  if (error) return <div>Camera error</div>;
+    video.srcObject = stream ?? null;
+
+    return () => {
+      video.srcObject = null;
+    };
+  }, [stream, ref]);
 
   return (
     <video
-      ref={videoRef}
+      ref={ref}
+      className={videoClassName}
       autoPlay
       playsInline
       muted
-      style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+      controls={false}
     />
   );
-}
+});
