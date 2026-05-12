@@ -80,3 +80,50 @@ body {
       -48px 48px;
   }
 }
+
+.emotionx-vcursor-core {
+  will-change: transform, opacity;
+}
+
+.emotionx-vcursor-aura {
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: -1.625rem 0 0 -1.625rem;
+  left: 50%;
+  top: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.35) 0%,
+    rgba(192, 132, 252, 0.12) 45%,
+    transparent 70%
+  );
+  animation: emotionx-vcursor-holo 2.8s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+.emotionx-vcursor-ring {
+  transform: translate(-50%, -50%);
+  animation: emotionx-vcursor-spin 10s linear infinite;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.2);
+}
+
+@keyframes emotionx-vcursor-holo {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes emotionx-vcursor-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
