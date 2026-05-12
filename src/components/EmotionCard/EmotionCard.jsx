@@ -1,7 +1,7 @@
 const EMOTION_COLORS = {
-  happy: '#34d399',
-  sad: '#60a5fa',
-  angry: '#f87171',
+  happy: '#2dd4bf',
+  sad: '#38bdf8',
+  angry: '#fb7185',
   surprised: '#fbbf24',
   fearful: '#c084fc',
   disgusted: '#a3e635',
@@ -19,61 +19,91 @@ export function EmotionCard({ hud }) {
     ? ORDER.map((key) => [key, expressions[key] ?? 0]).filter(([, v]) => typeof v === 'number')
     : [];
 
+  const accent = EMOTION_COLORS[dominant] ?? EMOTION_COLORS.neutral;
+
   return (
-    <aside className="emotionx-card pointer-events-none fixed bottom-6 left-6 z-[28] w-[min(92vw,320px)] rounded-2xl border border-cyan-400/20 bg-slate-950/70 p-4 shadow-[0_0_40px_rgba(34,211,238,0.12)] backdrop-blur-xl">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-cyan-200/80">
-          Affective core
-        </span>
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
+    <aside
+      className="emotionx-glass-panel pointer-events-none fixed bottom-8 left-4 z-[28] w-[min(calc(100vw-2rem),300px)] rounded-2xl p-5 md:bottom-10 md:left-8 md:w-[min(92vw,300px)] md:rounded-3xl md:p-6"
+      style={{
+        borderColor: 'rgba(34, 211, 238, 0.14)',
+      }}
+    >
+      <div className="mb-5 flex items-start justify-between gap-3 border-b border-white/[0.06] pb-4">
+        <div>
+          <p className="emotionx-micro text-[0.65rem] tracking-[0.26em] text-cyan-200/70">
+            Affective vector
+          </p>
+          <p className="mt-1 text-xs font-medium text-slate-500">Primary readout</p>
+        </div>
+        <div
+          className="mt-0.5 h-2 w-2 shrink-0 rounded-full"
+          style={{
+            background: accent,
+            boxShadow: `0 0 14px ${accent}, 0 0 28px rgba(34,211,238,0.25)`,
+          }}
+        />
       </div>
 
       {!hud ? (
-        <p className="text-sm text-slate-400">Align your face in frame…</p>
+        <p className="text-sm leading-relaxed text-slate-500">Center in frame to initialize lock…</p>
       ) : (
         <>
-          <div className="mb-3 flex items-end justify-between gap-2">
-            <div>
-              <p className="text-[11px] uppercase tracking-widest text-slate-500">Dominant</p>
+          <div className="mb-1 flex items-end justify-between gap-4">
+            <div className="min-w-0">
+              <p className="emotionx-micro mb-1 text-[0.58rem] text-slate-500">Dominant</p>
               <p
-                className="text-2xl font-semibold capitalize tracking-tight"
-                style={{ color: EMOTION_COLORS[dominant] ?? EMOTION_COLORS.neutral }}
+                className="truncate text-3xl font-semibold capitalize leading-none tracking-tight md:text-[2.15rem]"
+                style={{
+                  color: accent,
+                  textShadow: `0 0 40px ${accent}33`,
+                }}
               >
                 {dominant}
               </p>
             </div>
-            <div className="text-right">
-              <p className="text-[11px] uppercase tracking-widest text-slate-500">Confidence</p>
-              <p className="text-xl font-semibold tabular-nums text-slate-100">{confidencePct}%</p>
+            <div className="shrink-0 text-right">
+              <p className="emotionx-micro mb-1 text-[0.58rem] text-slate-500">Signal</p>
+              <p className="font-mono text-2xl font-semibold tabular-nums tracking-tight text-slate-50 md:text-[1.85rem]">
+                {confidencePct}
+                <span className="text-lg font-medium text-slate-500">%</span>
+              </p>
             </div>
           </div>
 
-          <div className="emotionx-confidence-track mb-4 h-2 overflow-hidden rounded-full bg-white/5">
+          <div className="emotionx-confidence-bar mb-6 mt-4 h-[3px] overflow-hidden rounded-full bg-white/[0.06]">
             <div
               className="emotionx-confidence-fill h-full rounded-full"
               style={{
                 width: `${Math.min(100, Math.max(0, confidencePct))}%`,
-                background: `linear-gradient(90deg, ${EMOTION_COLORS[dominant] ?? EMOTION_COLORS.neutral}, #22d3ee)`,
-                boxShadow: `0 0 18px ${EMOTION_COLORS[dominant] ?? '#22d3ee'}55`,
+                background: `linear-gradient(90deg, ${accent}dd, var(--ex-cyan) 85%, var(--ex-violet) 120%)`,
+                boxShadow: `0 0 20px ${accent}44`,
               }}
             />
           </div>
 
-          <ul className="space-y-2">
+          <p className="emotionx-micro mb-3 text-[0.58rem] text-slate-500">Distribution</p>
+          <ul className="max-h-[min(40vh,220px)] space-y-3 overflow-y-auto pr-1 [scrollbar-width:thin]">
             {rows.map(([emotion, value]) => (
-              <li key={emotion}>
-                <div className="mb-1 flex items-center justify-between text-xs text-slate-300">
-                  <span className="capitalize" style={{ color: EMOTION_COLORS[emotion] ?? '#cbd5f5' }}>
+              <li key={emotion} className="group">
+                <div className="mb-1.5 flex items-center justify-between gap-2">
+                  <span
+                    className="text-[11px] font-medium capitalize tracking-wide text-slate-400 transition-colors group-hover:text-slate-200"
+                    style={{ color: EMOTION_COLORS[emotion] ?? undefined }}
+                  >
                     {emotion}
                   </span>
-                  <span className="tabular-nums text-slate-400">{(value * 100).toFixed(0)}%</span>
+                  <span className="font-mono text-[11px] tabular-nums text-slate-500">
+                    {(value * 100).toFixed(0)}
+                    <span className="text-slate-600">%</span>
+                  </span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+                <div className="h-[3px] overflow-hidden rounded-full bg-white/[0.05]">
                   <div
                     className="emotionx-mini-bar h-full rounded-full"
                     style={{
                       width: `${Math.min(100, Math.max(0, value * 100))}%`,
-                      backgroundColor: EMOTION_COLORS[emotion] ?? '#64748b',
+                      background: `linear-gradient(90deg, ${EMOTION_COLORS[emotion] ?? '#64748b'}cc, transparent)`,
+                      boxShadow: `0 0 12px ${EMOTION_COLORS[emotion] ?? '#64748b'}33`,
                     }}
                   />
                 </div>

@@ -69,10 +69,11 @@ export function useVirtualCursor(
 
       for (let i = 0; i < s.trail.length; i += 1) {
         const p = s.trail[i];
-        const a = (1 - i / s.trail.length) * 0.35;
+        const t = 1 - i / s.trail.length;
+        const a = t * 0.2;
         ctx.beginPath();
-        ctx.fillStyle = `rgba(34, 211, 238, ${a})`;
-        ctx.arc(p.x, p.y, 3 + (1 - i / s.trail.length) * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(103, 232, 249, ${a})`;
+        ctx.arc(p.x, p.y, 2 + t * 1.8, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -87,18 +88,18 @@ export function useVirtualCursor(
           continue;
         }
         ctx.beginPath();
-        ctx.fillStyle = `rgba(192, 132, 252, ${p.life * 0.85})`;
-        ctx.arc(p.x, p.y, 2.2 * p.life, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232, 121, 249, ${p.life * 0.65})`;
+        ctx.arc(p.x, p.y, 1.9 * p.life, 0, Math.PI * 2);
         ctx.fill();
       }
 
       if (s.clickPulse > 0.04) {
         const r = 18 + (1 - s.clickPulse) * 55;
         ctx.save();
-        ctx.strokeStyle = `rgba(34, 211, 238, ${s.clickPulse * 0.65})`;
-        ctx.lineWidth = 2;
-        ctx.shadowColor = 'rgba(34, 211, 238, 0.55)';
-        ctx.shadowBlur = 18;
+        ctx.strokeStyle = `rgba(34, 211, 238, ${s.clickPulse * 0.55})`;
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = 'rgba(167, 139, 250, 0.45)';
+        ctx.shadowBlur = 22;
         ctx.beginPath();
         ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
         ctx.stroke();

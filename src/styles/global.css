@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+/* EmotionX cinematic palette — keep saturation disciplined */
+:root {
+  --ex-cyan: #22d3ee;
+  --ex-cyan-soft: #67e8f9;
+  --ex-violet: #a78bfa;
+  --ex-violet-deep: #7c3aed;
+  --ex-deep: #0f172a;
+  --ex-magenta: #e879f9;
+  --ex-glass: rgba(15, 23, 42, 0.52);
+  --ex-glass-edge: rgba(34, 211, 238, 0.22);
+  --ex-glass-edge-v: rgba(167, 139, 250, 0.18);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -13,13 +26,19 @@ body,
 }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family:
+    'Segoe UI Variable',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
   color: #fff;
   overflow: hidden;
   background:
-    radial-gradient(1200px 800px at 20% 0%, rgba(34, 211, 238, 0.12), transparent 55%),
-    radial-gradient(900px 600px at 100% 30%, rgba(168, 85, 247, 0.1), transparent 50%),
-    #030712;
+    radial-gradient(ellipse 1000px 700px at 15% -10%, rgba(34, 211, 238, 0.09), transparent 50%),
+    radial-gradient(ellipse 800px 600px at 95% 20%, rgba(124, 58, 237, 0.08), transparent 48%),
+    radial-gradient(ellipse 600px 500px at 50% 100%, rgba(232, 121, 249, 0.05), transparent 55%),
+    #020617;
 }
 
 .emotionx-shell {
@@ -39,7 +58,7 @@ body {
 .emotionx-brand {
   text-shadow:
     0 0 20px rgba(34, 211, 238, 0.35),
-    0 0 40px rgba(168, 85, 247, 0.2);
+    0 0 40px rgba(124, 58, 237, 0.2);
 }
 
 .emotionx-stage {
@@ -51,21 +70,21 @@ body {
 }
 
 .emotionx-confidence-fill {
-  transition: width 160ms ease-out;
+  transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .emotionx-mini-bar {
-  transition: width 180ms ease-out;
+  transition: width 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .emotionx-holo-grid {
   background-image:
-    linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(circle at 50% 35%, rgba(0, 0, 0, 0.65), transparent 62%);
-  animation: emotionx-holo-drift 18s linear infinite;
-  opacity: 0.55;
+    linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 60% at 50% 40%, rgba(0, 0, 0, 0.5), transparent 72%);
+  animation: emotionx-holo-drift 22s linear infinite;
+  opacity: 0.4;
 }
 
 @keyframes emotionx-holo-drift {
@@ -76,9 +95,36 @@ body {
   }
   100% {
     background-position:
-      48px 48px,
-      -48px 48px;
+      56px 56px,
+      -56px 56px;
   }
+}
+
+/* Glass panel shell — layered edge, no flat “card” */
+.emotionx-glass-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.75) 0%,
+    rgba(15, 23, 42, 0.42) 48%,
+    rgba(30, 27, 75, 0.35) 100%
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.12) inset,
+    0 0 0 1px rgba(167, 139, 250, 0.08) inset,
+    0 24px 48px rgba(0, 0, 0, 0.45),
+    0 0 60px rgba(34, 211, 238, 0.06);
+}
+
+.emotionx-micro {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.85);
 }
 
 .emotionx-vcursor-core {
@@ -86,36 +132,64 @@ body {
 }
 
 .emotionx-vcursor-aura {
-  width: 3.25rem;
-  height: 3.25rem;
-  margin: -1.625rem 0 0 -1.625rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: -1.75rem 0 0 -1.75rem;
   left: 50%;
   top: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(34, 211, 238, 0.35) 0%,
-    rgba(192, 132, 252, 0.12) 45%,
-    transparent 70%
-  );
-  animation: emotionx-vcursor-holo 2.8s ease-in-out infinite;
-  filter: blur(0.5px);
+  background:
+    radial-gradient(circle at 35% 35%, rgba(34, 211, 238, 0.45) 0%, transparent 42%),
+    radial-gradient(circle at 70% 60%, rgba(232, 121, 249, 0.2) 0%, transparent 50%),
+    radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 65%);
+  animation: emotionx-vcursor-breathe 3.2s ease-in-out infinite;
+  filter: blur(0.75px);
+}
+
+.emotionx-vcursor-ripple {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: -1.25rem 0 0 -1.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  animation: emotionx-vcursor-ripple 2.4s ease-out infinite;
+  opacity: 0.55;
 }
 
 .emotionx-vcursor-ring {
   transform: translate(-50%, -50%);
-  animation: emotionx-vcursor-spin 10s linear infinite;
-  box-shadow: 0 0 18px rgba(34, 211, 238, 0.2);
+  animation: emotionx-vcursor-spin 14s linear infinite;
+  border-color: rgba(34, 211, 238, 0.28);
+  box-shadow:
+    0 0 20px rgba(34, 211, 238, 0.15),
+    inset 0 0 12px rgba(167, 139, 250, 0.08);
 }
 
-@keyframes emotionx-vcursor-holo {
+@keyframes emotionx-vcursor-breathe {
   0%,
   100% {
-    opacity: 0.75;
+    opacity: 0.72;
     transform: scale(1);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.06);
+    opacity: 0.95;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes emotionx-vcursor-ripple {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.12;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
   }
 }
 
@@ -125,5 +199,40 @@ body {
   }
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes emotionx-hud-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.emotionx-hud-breathe {
+  animation: emotionx-hud-breathe 5.5s ease-in-out infinite;
+}
+
+.emotionx-shimmer-strip {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.12) 42%,
+    rgba(232, 121, 249, 0.08) 58%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: emotionx-shimmer 7s linear infinite;
+}
+
+@keyframes emotionx-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
   }
 }

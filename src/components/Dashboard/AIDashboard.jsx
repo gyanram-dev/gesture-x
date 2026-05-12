@@ -3,23 +3,13 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { EmotionCard } from '../EmotionCard/EmotionCard';
 
 const EMOTION_COLORS = {
-  happy: '#34d399',
-  sad: '#60a5fa',
-  angry: '#f87171',
+  happy: '#2dd4bf',
+  sad: '#38bdf8',
+  angry: '#fb7185',
   surprised: '#fbbf24',
   fearful: '#c084fc',
   disgusted: '#a3e635',
   neutral: '#94a3b8',
-};
-
-const EMOTION_GLYPH = {
-  happy: '😊',
-  sad: '😢',
-  angry: '😠',
-  neutral: '😐',
-  surprised: '😮',
-  fearful: '😨',
-  disgusted: '🤢',
 };
 
 const ANALYTICS_ORDER = ['neutral', 'happy', 'sad', 'angry', 'surprised', 'fearful', 'disgusted'];
@@ -50,7 +40,7 @@ function useUiFps(sampleMs = 450) {
   return fps;
 }
 
-function useEmotionTimeline(hud, max = 14) {
+function useEmotionTimeline(hud, max = 12) {
   const [events, setEvents] = useState([]);
   const sigRef = useRef('');
 
@@ -68,6 +58,31 @@ function useEmotionTimeline(hud, max = 14) {
 
 const MemoEmotionCard = memo(EmotionCard);
 
+const CinematicMark = memo(function CinematicMark({ accent }) {
+  return (
+    <motion.div
+      className="relative flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11"
+      animate={{ y: [0, -2, 0] }}
+      transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+    >
+      <motion.div
+        className="absolute inset-0 rotate-45 rounded-[3px] border border-cyan-400/35"
+        style={{
+          boxShadow: `0 0 22px ${accent}40, inset 0 0 14px rgba(34,211,238,0.08)`,
+        }}
+        animate={{
+          opacity: [0.75, 1, 0.75],
+        }}
+        transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div
+        className="absolute inset-[3px] rotate-45 rounded-[2px] border border-white/12 bg-gradient-to-br from-cyan-500/5 to-violet-600/10"
+        style={{ boxShadow: `inset 0 0 16px ${accent}18` }}
+      />
+    </motion.div>
+  );
+});
+
 const AnalyticsPanel = memo(function AnalyticsPanel({ hud }) {
   const rows = hud?.expressions
     ? ANALYTICS_ORDER.map((k) => [k, hud.expressions[k] ?? 0])
@@ -75,44 +90,48 @@ const AnalyticsPanel = memo(function AnalyticsPanel({ hud }) {
 
   return (
     <motion.aside
-      className="pointer-events-none fixed bottom-6 right-6 z-[28] w-[min(92vw,280px)] overflow-hidden rounded-2xl border border-fuchsia-400/20 bg-slate-950/65 p-4 shadow-[0_0_36px_rgba(192,132,252,0.18)] backdrop-blur-xl"
-      initial={{ opacity: 0, x: 24 }}
+      className="emotionx-glass-panel pointer-events-none fixed bottom-8 right-4 z-[28] w-[min(calc(100vw-2rem),272px)] rounded-2xl p-5 md:bottom-10 md:right-8 md:rounded-3xl md:p-6"
+      style={{ borderColor: 'rgba(167, 139, 250, 0.14)' }}
+      initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 32 }}
     >
-      <div className="mb-3 flex items-center justify-between">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-fuchsia-200/80">
-          Neural analytics
-        </span>
-        <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] uppercase tracking-widest text-slate-400">
+      <div className="mb-5 flex items-center justify-between gap-2 border-b border-white/[0.06] pb-4">
+        <div>
+          <p className="emotionx-micro text-[0.58rem] tracking-[0.24em] text-violet-200/75">
+            Neural spectrum
+          </p>
+          <p className="mt-0.5 text-xs text-slate-500">Expression weights</p>
+        </div>
+        <span className="emotionx-micro rounded border border-white/10 bg-white/[0.04] px-2 py-1 text-[0.55rem] text-slate-400">
           Live
         </span>
       </div>
       {!hud ? (
-        <p className="text-sm text-slate-500">Awaiting facial lock…</p>
+        <p className="text-sm text-slate-500">Awaiting lock…</p>
       ) : (
-        <ul className="space-y-2.5">
+        <ul className="max-h-[min(38vh,240px)] space-y-3 overflow-y-auto pr-1 [scrollbar-width:thin]">
           {rows.map(([emotion, value]) => {
             const pct = Math.min(100, Math.max(0, value * 100));
             const color = EMOTION_COLORS[emotion] ?? EMOTION_COLORS.neutral;
             return (
               <li key={emotion}>
-                <div className="mb-1 flex items-center justify-between text-[11px] text-slate-300">
-                  <span className="capitalize" style={{ color }}>
+                <div className="mb-1 flex items-center justify-between text-[11px]">
+                  <span className="font-medium capitalize tracking-wide text-slate-400" style={{ color }}>
                     {emotion}
                   </span>
-                  <span className="tabular-nums text-slate-500">{pct.toFixed(0)}%</span>
+                  <span className="font-mono tabular-nums text-slate-500">{pct.toFixed(0)}%</span>
                 </div>
-                <div className="relative h-2 overflow-hidden rounded-full bg-white/5">
+                <div className="relative h-[3px] overflow-hidden rounded-full bg-white/[0.05]">
                   <motion.div
                     className="h-full rounded-full"
                     style={{
-                      background: `linear-gradient(90deg, ${color}, #22d3ee)`,
-                      boxShadow: `0 0 14px ${color}55`,
+                      background: `linear-gradient(90deg, ${color}cc, var(--ex-cyan) 100%)`,
+                      boxShadow: `0 0 14px ${color}40`,
                     }}
                     initial={false}
                     animate={{ width: `${pct}%` }}
-                    transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 34 }}
                   />
                 </div>
               </li>
@@ -128,58 +147,41 @@ const FpsBadge = memo(function FpsBadge() {
   const fps = useUiFps(500);
   return (
     <motion.div
-      className="pointer-events-none fixed right-5 top-24 z-30 rounded-xl border border-emerald-400/25 bg-slate-950/70 px-3 py-2 text-[10px] uppercase tracking-[0.2em] text-emerald-200/90 shadow-[0_0_28px_rgba(16,185,129,0.2)] backdrop-blur-xl sm:right-7 sm:top-28"
-      initial={{ opacity: 0, scale: 0.92 }}
+      className="emotionx-glass-panel pointer-events-none fixed right-4 top-24 z-30 rounded-xl px-3 py-2.5 md:right-7 md:top-28"
+      style={{ borderColor: 'rgba(34, 211, 238, 0.16)' }}
+      initial={{ opacity: 0, scale: 0.94 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.35 }}
+      transition={{ duration: 0.4 }}
     >
       <div className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
-        <span className="tabular-nums text-xs text-slate-100">{fps}</span>
-        <span className="text-slate-500">fps</span>
+        <span
+          className="h-1.5 w-1.5 rounded-full bg-cyan-400"
+          style={{ boxShadow: '0 0 10px rgba(34,211,238,0.85)' }}
+        />
+        <span className="emotionx-micro text-[0.55rem] text-cyan-200/80">Render</span>
+        <span className="font-mono text-sm tabular-nums text-slate-100">{fps}</span>
       </div>
-      <p className="mt-1 text-[9px] font-normal normal-case tracking-normal text-slate-500">UI thread</p>
+      <p className="mt-1 pl-3.5 text-[10px] text-slate-500">UI thread</p>
     </motion.div>
-  );
-});
-
-const EmotionGlyph = memo(function EmotionGlyph({ emotion }) {
-  const g = EMOTION_GLYPH[emotion] ?? '◇';
-  return (
-    <motion.span
-      key={emotion}
-      className="select-none text-3xl sm:text-4xl"
-      aria-hidden
-      initial={{ scale: 0.9, opacity: 0.5, rotate: -6 }}
-      animate={{
-        scale: [1, 1.06, 1],
-        opacity: 1,
-        rotate: [0, 3, 0],
-      }}
-      transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      {g}
-    </motion.span>
   );
 });
 
 const Timeline = memo(function Timeline({ events }) {
   return (
     <motion.div
-      className="pointer-events-none fixed bottom-20 left-1/2 z-[28] w-[min(96vw,720px)] -translate-x-1/2 rounded-2xl border border-cyan-400/20 bg-slate-950/55 px-3 py-2 shadow-[0_0_32px_rgba(34,211,238,0.14)] backdrop-blur-xl"
-      initial={{ opacity: 0, y: 16 }}
+      className="emotionx-glass-panel pointer-events-none fixed bottom-28 left-1/2 z-[28] w-[min(calc(100vw-2rem),680px)] -translate-x-1/2 rounded-2xl px-4 py-3 md:bottom-32 md:rounded-3xl md:px-5"
+      style={{ borderColor: 'rgba(34, 211, 238, 0.12)' }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="mb-1 flex items-center justify-between px-1">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.24em] text-cyan-200/75">
-          Affect timeline
-        </span>
-        <span className="text-[9px] text-slate-500">Recent shifts</span>
+      <div className="mb-2 flex items-center justify-between">
+        <span className="emotionx-micro text-[0.58rem] text-cyan-200/70">Temporal trace</span>
+        <span className="text-[10px] text-slate-600">Recent</span>
       </div>
-      <div className="flex max-w-full gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex max-w-full gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {events.length === 0 ? (
-          <span className="px-2 py-1 text-xs text-slate-500">Calibrating stream…</span>
+          <span className="py-1 text-xs text-slate-500">Stabilizing…</span>
         ) : (
           <AnimatePresence initial={false}>
             {events.map((ev) => {
@@ -187,21 +189,20 @@ const Timeline = memo(function Timeline({ events }) {
               return (
                 <motion.div
                   key={ev.id}
-                  initial={{ opacity: 0, x: 12, scale: 0.96 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-                  className="flex shrink-0 items-center gap-2 rounded-full border px-2.5 py-1 text-[11px]"
+                  initial={{ opacity: 0, x: 8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  className="flex shrink-0 items-center gap-2 rounded-full border border-white/[0.08] bg-slate-950/40 px-3 py-1.5 text-[11px] backdrop-blur-sm"
                   style={{
-                    borderColor: `${color}55`,
-                    background: `linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.55))`,
-                    boxShadow: `0 0 18px ${color}22`,
+                    borderColor: `${color}33`,
+                    boxShadow: `0 0 20px ${color}15`,
                   }}
                 >
-                  <span className="capitalize" style={{ color }}>
+                  <span className="font-medium capitalize tracking-wide" style={{ color }}>
                     {ev.emotion}
                   </span>
-                  <span className="tabular-nums text-slate-400">
+                  <span className="font-mono tabular-nums text-slate-500">
                     {(ev.confidence * 100).toFixed(0)}%
                   </span>
                 </motion.div>
@@ -217,67 +218,72 @@ const Timeline = memo(function Timeline({ events }) {
 export const AIDashboard = memo(function AIDashboard({ hud, isModelLoading, modelError }) {
   const events = useEmotionTimeline(hud);
   const dominant = hud?.emotion ?? 'neutral';
+  const accent = EMOTION_COLORS[dominant] ?? EMOTION_COLORS.neutral;
   const statusLine = isModelLoading
-    ? 'Syncing face models…'
+    ? 'Synchronizing vision models…'
     : modelError
-      ? 'Vision offline'
-      : 'Realtime affect pipeline armed';
+      ? 'Neural vision offline'
+      : 'Affective inference · locked';
 
   return (
     <>
       <div className="emotionx-holo-grid pointer-events-none fixed inset-0 z-[8]" aria-hidden />
+
       <motion.div
-        className="pointer-events-none fixed inset-0 z-[9] mix-blend-screen opacity-[0.11]"
+        className="pointer-events-none fixed inset-0 z-[9] mix-blend-screen opacity-[0.065]"
         aria-hidden
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.11 }}
+        animate={{ opacity: 0.065 }}
       >
         <motion.div
-          className="absolute -inset-[40%] bg-[conic-gradient(at_50%_50%,rgba(34,211,238,0.14),transparent_40%,rgba(192,132,252,0.12),transparent_75%)]"
+          className="absolute -inset-[38%] bg-[conic-gradient(at_50%_50%,rgba(34,211,238,0.11),transparent_42%,rgba(167,139,250,0.09),transparent_78%)]"
           animate={{ rotate: [0, 360] }}
-          transition={{ duration: 48, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 56, repeat: Infinity, ease: 'linear' }}
         />
       </motion.div>
 
       <motion.div
-        className="pointer-events-none fixed inset-0 z-[10] bg-gradient-to-br from-cyan-500/5 via-transparent to-fuchsia-500/10"
+        className="pointer-events-none fixed inset-0 z-[10] bg-gradient-to-br from-cyan-500/[0.04] via-transparent to-violet-600/[0.06]"
         aria-hidden
-        animate={{ opacity: [0.45, 0.75, 0.45] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ opacity: [0.55, 0.85, 0.55] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       <FpsBadge />
 
       <motion.header
-        className="pointer-events-none fixed left-0 right-0 top-0 z-30 flex justify-center px-4 pt-6 sm:pt-8"
-        initial={{ y: -14, opacity: 0 }}
+        className="emotionx-hud-breathe pointer-events-none fixed left-0 right-0 top-0 z-30 flex justify-center px-4 pt-6 sm:pt-8"
+        initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="relative overflow-hidden rounded-full border border-cyan-400/35 bg-slate-950/55 px-5 py-2.5 shadow-[0_0_42px_rgba(34,211,238,0.22)] backdrop-blur-xl sm:px-7">
-          <motion.div
-            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cyan-500/15 via-fuchsia-500/15 to-cyan-500/15"
-            animate={{ x: ['-30%', '30%', '-30%'] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-          />
-          <div className="relative flex items-center gap-3 sm:gap-4">
-            <EmotionGlyph emotion={dominant} />
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-cyan-100/90">
-                EmotionX · Neural HUD
-              </span>
-              <span className="text-[11px] text-slate-400">{statusLine}</span>
+        <div
+          className="emotionx-glass-panel relative max-w-[min(92vw,520px)] overflow-hidden rounded-2xl px-5 py-3.5 sm:rounded-3xl sm:px-8 sm:py-4"
+          style={{ borderColor: 'rgba(34, 211, 238, 0.18)' }}
+        >
+          <div className="emotionx-shimmer-strip pointer-events-none absolute inset-0 opacity-40" />
+          <div className="relative flex flex-wrap items-center justify-center gap-4 sm:justify-between sm:gap-6">
+            <div className="flex items-center gap-4">
+              <CinematicMark accent={accent} />
+              <div className="text-left">
+                <p className="emotionx-micro text-[0.58rem] text-cyan-200/85">EmotionX</p>
+                <h1 className="mt-0.5 text-sm font-semibold tracking-wide text-slate-100 sm:text-[0.95rem]">
+                  Neural interface
+                </h1>
+                <p className="mt-1 max-w-[240px] text-[11px] leading-snug text-slate-500 sm:max-w-none">
+                  {statusLine}
+                </p>
+              </div>
             </div>
-            <motion.span
-              className="hidden h-9 w-px bg-gradient-to-b from-transparent via-cyan-300/40 to-transparent sm:block"
-              animate={{ opacity: [0.35, 0.9, 0.35] }}
-              transition={{ duration: 3.2, repeat: Infinity }}
-            />
-            <div className="hidden flex-col text-[10px] uppercase tracking-[0.18em] text-slate-500 sm:flex">
-              <span className="text-slate-300">Dominant</span>
-              <span className="text-sm font-semibold capitalize tracking-normal text-white">
+            <div className="hidden h-12 w-px bg-gradient-to-b from-transparent via-cyan-400/25 to-transparent sm:block" />
+            <div className="hidden min-w-[100px] text-right sm:block">
+              <p className="emotionx-micro text-[0.58rem] text-slate-500">Dominant</p>
+              <p
+                className="mt-0.5 text-lg font-semibold capitalize tracking-tight text-white"
+                style={{ textShadow: `0 0 28px ${accent}44` }}
+              >
                 {hud ? dominant : '—'}
-              </span>
+              </p>
             </div>
           </div>
         </div>
@@ -285,9 +291,9 @@ export const AIDashboard = memo(function AIDashboard({ hud, isModelLoading, mode
 
       <motion.div
         className="pointer-events-none"
-        initial={{ opacity: 0, y: 18 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ delay: 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
         <MemoEmotionCard hud={hud} />
       </motion.div>
@@ -297,8 +303,9 @@ export const AIDashboard = memo(function AIDashboard({ hud, isModelLoading, mode
 
       {modelError ? (
         <motion.div
-          className="pointer-events-none fixed bottom-8 left-1/2 z-40 max-w-[min(92vw,420px)] -translate-x-1/2 rounded-xl border border-red-400/35 bg-red-950/85 px-4 py-3 text-center text-sm text-red-100 shadow-[0_0_30px_rgba(248,113,113,0.35)] backdrop-blur-md"
-          initial={{ opacity: 0, y: 10 }}
+          className="emotionx-glass-panel pointer-events-none fixed bottom-8 left-1/2 z-40 max-w-[min(92vw,400px)] -translate-x-1/2 rounded-2xl px-4 py-3 text-center text-sm text-red-200"
+          style={{ borderColor: 'rgba(248, 113, 113, 0.35)' }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
         >
           Model load failed: {modelError}

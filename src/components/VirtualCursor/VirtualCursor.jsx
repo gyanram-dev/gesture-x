@@ -17,21 +17,13 @@ export function VirtualCursor({ videoRef, resultsRef, enabled = true }) {
   });
 
   return (
-    <div
-      className="pointer-events-none fixed inset-0 z-[42]"
-      aria-hidden
-    >
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
-      />
-      <div
-        ref={coreRef}
-        className="emotionx-vcursor-core absolute left-0 top-0 opacity-0"
-      >
+    <div className="pointer-events-none fixed inset-0 z-[42]" aria-hidden>
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-[0.92]" />
+      <div ref={coreRef} className="emotionx-vcursor-core absolute left-0 top-0 opacity-0">
         <div className="emotionx-vcursor-aura pointer-events-none absolute inset-0 rounded-full" />
-        <div className="emotionx-vcursor-dot pointer-events-none absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-100 shadow-[0_0_14px_rgba(34,211,238,0.95),0_0_28px_rgba(34,211,238,0.45)]" />
-        <div className="emotionx-vcursor-ring pointer-events-none absolute left-1/2 top-1/2 h-9 w-9 rounded-full border border-cyan-400/35" />
+        <div className="emotionx-vcursor-ripple pointer-events-none" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-cyan-100 to-violet-200 shadow-[0_0_16px_rgba(34,211,238,0.9),0_0_32px_rgba(167,139,250,0.35)]" />
+        <div className="emotionx-vcursor-ring pointer-events-none absolute left-1/2 top-1/2 h-10 w-10 rounded-full border" />
       </div>
     </div>
   );
